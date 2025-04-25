@@ -1,0 +1,120 @@
+openapi: 3.0.3
+info:
+  title: Deck Builder API - MTG
+  description: API para gerenciamento de decks e cartas de Magic: The Gathering
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+paths:
+  /decks:
+    get:
+      summary: Listar todos os decks
+      responses:
+        '200':
+          description: Lista de decks retornada com sucesso
+        '500':
+          description: Erro interno do servidor
+    post:
+      summary: Criar novo deck
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeckDTO'
+      responses:
+        '201':
+          description: Deck criado com sucesso
+        '400':
+          description: Requisição inválida
+        '500':
+          description: Erro interno do servidor
+  /decks/{id}:
+    get:
+      summary: Buscar deck por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Deck encontrado
+        '404':
+          description: Deck não encontrado
+        '500':
+          description: Erro interno do servidor
+    put:
+      summary: Atualizar deck existente
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeckDTO'
+      responses:
+        '200':
+          description: Deck atualizado
+        '400':
+          description: Requisição inválida
+        '404':
+          description: Deck não encontrado
+        '500':
+          description: Erro interno do servidor
+    delete:
+      summary: Excluir deck existente
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deck excluído com sucesso
+        '404':
+          description: Deck não encontrado
+        '500':
+          description: Erro interno do servidor
+components:
+  schemas:
+    DeckDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        formato:
+          type: string
+        descricao:
+          type: string
+        cartas:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartaDeckDTO'
+        dataCriacao:
+          type: string
+          format: date-time
+    CartaDeckDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        tipo:
+          type: string
+        cor:
+          type: string
+        custoMana:
+          type: string
+        quantidade:
+          type: integer
